@@ -8,10 +8,12 @@ module.exports = function(hoodie, callback) {
       console.log('handle email-debug web hook');
 
       if (!request.payload) {
+        reply({status: 'error', error: 'no_payload'});
         return; // ignore
       }
 
       if (!request.payload.mandrill_events) {
+        reply({status: 'error', error: 'not_mandrill'});
         return; // ignore
       }
 
