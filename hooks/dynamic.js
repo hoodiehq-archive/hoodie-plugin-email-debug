@@ -34,7 +34,7 @@ module.exports = function(hoodie, callback) {
         });
       });
 
-      reply({email_debug: 'works'});
+      reply({status: 'ok'});
     }
   };
 };

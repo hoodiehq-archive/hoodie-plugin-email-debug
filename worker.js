@@ -3,9 +3,6 @@
 // b) set up web hook for mandril to call us back for emails
 
 module.exports =  function (hoodie, callback) {
-  mod_hoodie = hoodie;
-  console.log(' - stating hoodie-plugin-email-debug');
-
   var plugin_db_name = 'plugin/email-debug';
 
   // create plugin database
@@ -29,6 +26,5 @@ module.exports =  function (hoodie, callback) {
     });
   });
 
-  console.log(' - done stating hoodie-plugin-email-debug');
   callback();
 };
