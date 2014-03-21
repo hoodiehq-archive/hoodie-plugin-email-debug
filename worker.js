@@ -21,7 +21,7 @@ module.exports =  function (hoodie, callback) {
     var plugin_db = hoodie.database(plugin_db_name);
     delete email._rev;
 
-    plugin_db.add('debug-email', email, function(error) {
+    plugin_db.add('email-debug', email, function(error) {
       if (error) {
         console.log('adding debug email failed:');
         console.log(error);
