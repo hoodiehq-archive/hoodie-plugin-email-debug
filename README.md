@@ -17,7 +17,4 @@ function(doc) {
 
 There can be more than one event per email, we enumerate them with `-1`, `-2` etc.
 
-Currently depends on https://github.com/hoodiehq/hoodie-server/pull/248
-
-
-TODO: If multiple events come in more than one webhook call, we get id collisions, should not happen
+TODO: Using the map function above we only get the first event for an email from mandrill. I’d say secondary ones can be fetched by an admin interface specifically.
