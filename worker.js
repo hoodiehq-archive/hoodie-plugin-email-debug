@@ -6,19 +6,19 @@ module.exports =  function (hoodie, callback) {
   var plugin_db_name = 'plugin/email-debug';
 
   // create plugin database
-  hoodie.database.add(plugin_db_name, function(error) {
-    if (error && error.error != 'file_exists') {
+  hoodie.database.add(plugin_db_name, function (error) {
+    if (error && error.error !== 'file_exists') {
       console.log(error);
       return callback(error);
     }
   });
 
-  hoodie.task.on('email:add', function(dbName, email) {
+  hoodie.task.on('email:add', function (dbName, email) {
 
     var plugin_db = hoodie.database(plugin_db_name);
     delete email._rev;
 
-    plugin_db.add('email-debug', email, function(error) {
+    plugin_db.add('email-debug', email, function (error) {
       if (error) {
         console.log('adding debug email failed:');
         console.log(error);

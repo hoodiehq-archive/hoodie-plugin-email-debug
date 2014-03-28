@@ -2,9 +2,9 @@ var util = require('util');
 
 var plugin_db_name = 'plugin/email-debug';
 
-module.exports = function(hoodie, callback) {
+module.exports = function (hoodie) {
   return {
-    'server.api.plugin-request': function(request, reply) {
+    'server.api.plugin-request': function (request, reply) {
       console.log('handle email-debug web hook');
 
       if (!request.payload) {
@@ -19,21 +19,21 @@ module.exports = function(hoodie, callback) {
 
       var events = JSON.parse(request.payload.mandrill_events);
 
-      events.forEach(function(mandrillEvent, eventNr) {
-        mandrillEvent.id = util.format("%s-%d",
+      events.forEach(function (mandrillEvent, eventNr) {
+        mandrillEvent.id = util.format('%s-%d',
           mandrillEvent.msg.metadata.email_id,
           eventNr);
 
         hoodie.database(plugin_db_name).add(
           'mandrill',
           mandrillEvent,
-          function(error) {
+          function (error) {
             if (error) {
               console.log('could not add mandrill event: %j because of %s',
                 mandrillEvent,
                 error);
             }
-        });
+          });
       });
 
       reply({status: 'ok'});
