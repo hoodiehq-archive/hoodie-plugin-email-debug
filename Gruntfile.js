@@ -23,6 +23,9 @@ module.exports = function (grunt) {
       },
       unit: {
         src: ['test/unit/*.js']
+      },
+      integration: {
+        src: ['test/integration/*.js']
       }
     },
 
@@ -35,16 +38,16 @@ module.exports = function (grunt) {
         command: 'rm -rf ' + require('path').resolve(__dirname, 'data')
       },
       npmLink: {
-        command: 'npm link && npm link hoodie-plugin-template'
+        command: 'npm link && npm link hoodie-plugin-email-debug'
       },
       npmUnlink: {
-        command: 'npm unlink && npm unlink hoodie-plugin-template'
+        command: 'npm unlink && npm unlink hoodie-plugin-email-debug'
       },
       installPlugin: {
-        command: 'hoodie install template'
+        command: 'hoodie install email-debug'
       },
       removePlugin: {
-        command: 'hoodie uninstall template'
+        command: 'hoodie uninstall email-debug'
       }
     },
 
@@ -62,6 +65,9 @@ module.exports = function (grunt) {
     env: {
       test: {
         HOODIE_SETUP_PASSWORD: 'testing'
+      },
+      post_launch: {
+        INTEGRATION_PORT: '<%= connect.options.port %>'
       }
     },
 
@@ -102,11 +108,39 @@ module.exports = function (grunt) {
     'shell:removePlugin'
   ]);
 
+  grunt.registerTask('test:integration', ['simplemocha:integration']);
+  grunt.registerTask('test:server', [
+    'env:test',
+    'shell:removeData',
+    'shell:npmLink',
+    'shell:installPlugin',
+    'hoodie',
+    'continueOn',
+    'env:post_launch',
+    'test:integration',
+    'continueOff',
+    'hoodie_stop',
+    'shell:npmUnlink',
+    'shell:removePlugin'
+  ]);
+
+  grunt.registerTask('test:live', [
+    'env:test',
+    'shell:removeData',
+    'shell:npmLink',
+    'shell:installPlugin',
+    'hoodie',
+    'continueOn',
+    'env:post_launch',
+  ]);
+
+
   grunt.registerTask('default', []);
   grunt.registerTask('test', [
     'jshint',
     'test:unit',
-    'test:browser'
+    'test:browser',
+    'test:server'
   ]);
 
 };

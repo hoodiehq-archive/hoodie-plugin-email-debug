@@ -3,6 +3,7 @@ var util = require('util');
 var plugin_db_name = 'plugin/email-debug';
 
 module.exports = function (hoodie) {
+  console.log('loaded email-debug deynamic hoooks');
   return {
     'server.api.plugin-request': function (request, reply) {
       console.log('handle email-debug web hook');
