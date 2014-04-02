@@ -16,18 +16,24 @@ li {
 
 <script src="jquery-2.0.3.min.js"></script>
 <script type="text/javascript" charset="utf-8">
+
+var parsePrefix = function(id) {
+  return id.split('/')[1];
+};
+
 var view_url = '/_api/plugin%2femail-debug/_design/email/_view/debug-view?include_docs=true';
 $.get(view_url).done(function(res) {
   $('#loading').hide();
   res = JSON.parse(res);
   res.rows.forEach(function(row) {
     // check if we have corresponding mandrill doc:
-    var doc = row.doc ? 'Reached Mandrill' : 'Did NOT reach Mandrill';
+    var mandrill = row.doc ? 'Reached Mandrill' : 'Did NOT reach Mandrill';
     var cls = row.doc ? 'green' : 'red';
-    var prefix = row.doc.msg.metadata.email_id;
+
+    var prefix = parsePrefix(row.id)
 
     // draw
-    $('#list').append('<li id="' + prefix + '" class="' + cls + '"> ' + row.key[0] + ': <a href="/_api/plugin%2femail-debug/' + encodeURIComponent(row.id) + '">' + row.key[1] + '</a>: <a href="/_api/plugin%2femail-debug/' + encodeURIComponent(row.doc._id) + '">' + doc + '</a></li>');
+    $('#list').append('<li id="' + prefix + '" class="' + cls + '"> ' + row.key[0] + ': <a href="/_api/plugin%2femail-debug/' + encodeURIComponent(row.id) + '">' + prefix + '</a>: <a href="/_api/plugin%2femail-debug/' + encodeURIComponent(row.doc._id) + '">' + mandrill + '</a></li>');
 
     // check if we have subsequent mandrill docs:
     var related_docs_url = '/_api/plugin%2femail-debug/_all_docs?startkey=%22mandrill/' + prefix + '%22&endkey=%22mandrill/' + prefix + '\u9999%22&include_docs=true'
