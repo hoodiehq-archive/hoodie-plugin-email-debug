@@ -1,0 +1,42 @@
+<h1>Email Debugging!</h1>
+<ul id="list">
+  <li id="loading">Loading…</li>
+</ul>
+<style type="text/css" media="screen">
+.green {
+  background-color: #00F900;
+}
+.red {
+  background-color: red;
+}
+li {
+  border-bottom: grey 1px solid;
+}
+</style>
+
+<script src="jquery-2.0.3.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+var view_url = '/_api/plugin%2femail-debug/_design/email/_view/debug-view?include_docs=true';
+$.get(view_url).done(function(res) {
+  $('#loading').hide();
+  res = JSON.parse(res);
+  res.rows.forEach(function(row) {
+    // check if we have corresponding mandrill doc:
+    var doc = row.doc ? 'Reached Mandrill' : 'Did NOT reach Mandrill';
+    var cls = row.doc ? 'green' : 'red';
+    var prefix = row.doc.msg.metadata.email_id;
+
+    // draw
+    $('#list').append('<li id="' + prefix + '" class="' + cls + '"> ' + row.key[0] + ': <a href="/_api/plugin%2femail-debug/' + encodeURIComponent(row.id) + '">' + row.key[1] + '</a>: <a href="/_api/plugin%2femail-debug/' + encodeURIComponent(row.doc._id) + '">' + doc + '</a></li>');
+
+    // check if we have subsequent mandrill docs:
+    var related_docs_url = '/_api/plugin%2femail-debug/_all_docs?startkey=%22mandrill/' + prefix + '%22&endkey=%22mandrill/' + prefix + '\u9999%22&include_docs=true'
+    $.get(related_docs_url).done(function(result) {
+      result = JSON.parse(result);
+      result.rows.forEach(function(sub_row, idx) {
+        $('#' + prefix).append(', ' + '<a href="/_api/plugin%2femail-debug/' + encodeURIComponent(sub_row.id) + '">' + (idx+1) + ' (' + sub_row.doc.event + ')</a>')
+      });
+    });
+  });
+});
+</script>
