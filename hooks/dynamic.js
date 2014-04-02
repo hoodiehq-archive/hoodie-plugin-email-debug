@@ -7,7 +7,6 @@ module.exports = function (hoodie) {
   console.log('loaded email-debug deynamic hoooks');
   return {
     'server.api.plugin-request': function (request, reply) {
-      console.log('handle email-debug web hook');
 
       if (!request.payload) {
         reply({status: 'error', error: 'no_payload'});
