@@ -32,10 +32,9 @@ module.exports = function (hoodie) {
             uuid.v4());
         }
 
-        mandrillEvent.id = util.format('%s-%d-%s',
+        mandrillEvent.id = util.format('%s-%d',
           email_id,
-          eventNr,
-          uuid.v4()
+          eventNr
         );
 
         hoodie.database(plugin_db_name).add(
