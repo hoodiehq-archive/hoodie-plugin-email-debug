@@ -1,6 +1,6 @@
 {
   "name": "hoodie-plugin-email-debug",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Debug Hoodie Email",
   "main": "worker.js",
   "author": "Jan Lehnardt <jan@apache.org>",
