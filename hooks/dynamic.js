@@ -33,7 +33,8 @@ module.exports = function (hoodie) {
         }
 
         mandrillEvent.id = util.format('%s-%d',
-          email_id);
+          email_id,
+          eventNr);
 
         hoodie.database(plugin_db_name).add(
           'mandrill',
